@@ -6,6 +6,7 @@ import json
 import yagmail
 import poplib
 import logging
+import requests
 LOG = logging.getLogger('main')
 from email import parser
 
@@ -22,6 +23,10 @@ def index(request):
     return HttpResponse("欢迎光临 自强学堂!")
 
 def geturl(request):
+    '''
+    get free shadowsocks website's url
+    :return: url
+    '''
     try:
         if request.method == 'GET':
             url=get_ss_url()
@@ -63,7 +68,6 @@ def get_ss_url():
     #print subject
     #print base64.decodestring(subject) # 对字符串解码
     content =msg.get_payload(decode=True)
-
     url = re.search(r'[a-zA-z]+://[^\s]*',content)
     ss_url = url.group().replace('"','')
     # Parse message intom an email object:
@@ -80,5 +84,10 @@ def send_yagmail(request):
     yag.send(to=to_list, headers={'From': 'katios<wxjytesting@163.com>;'}, subject='get_ss', contents='get_ss')
 
 def getqrcode(request):
-    pass
+    pictures = ['usa', 'usb', 'usc', 'jpa', 'jpb', 'jpc', 'sga', 'sgb', 'sgc']
+    result = requests.get('http://katios.xyz:8000/geturl')
+    url = json.loads(result.content)['url']
+    return render(request, 'qrcode.html', {'url': url, 'pictures': pictures})
+
+
 
