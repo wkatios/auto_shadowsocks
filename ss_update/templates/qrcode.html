@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>Title</title>
+</head>
+<body>
+    {% for i in  pictures %}
+        <div style="width: 350px;margin: 0 auto;margin-top: 10px;">
+            <span> {{url}}img/qr/{{i}}.png </span>
+            <img src="{{url}}img/qr/{{i}}.png">
+        </div>
+    {% endfor %}
+<!--
+    {% if imgurl %}
+    <div style="width: 450px;margin: 0 auto;margin-top: 10px;">
+        <img src="{{ imgurl }}" style="width: 100%;">
+    </div>
+    {% endif %}
+  -->
+</body>
+</html>
