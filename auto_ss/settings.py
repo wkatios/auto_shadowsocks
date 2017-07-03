@@ -24,6 +24,7 @@ SECRET_KEY = 'va=themu&lc+f_-(m!a21^%u*m)_!@rm*@zwwa69y$=ud9dyo_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# DEBUG = False
 
 ALLOWED_HOSTS = ['118.89.172.125','*']
 
@@ -37,10 +38,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'ss_update' 
+    'django_hosts',
+    'ss_update',
+    'translate',
+    'django_crontab',
+
 ]
 
 MIDDLEWARE = [
+    'django_hosts.middleware.HostsRequestMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -48,9 +54,16 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_hosts.middleware.HostsRequestMiddleware',
 ]
 
-ROOT_URLCONF = 'auto_ss.urls'
+ROOT_URLCONF = 'translate.urls'
+# ROOT_URLCONF = 'ss_update.urls'
+ROOT_HOSTCONF  = 'auto_ss.host'
+# DEFAULT_HOST = 'translate'
+DEFAULT_HOST = 'www'
+# ROOT_URLCONF = 'translate.urls'
+
 
 TEMPLATES = [
     {
@@ -106,7 +119,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -119,6 +132,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_PATH = os.path.join(BASE_DIR,'static')
+# STATICFILES_DIRS=[( os.path.join(BASE_DIR, 'static')),]
+
+
+CRONJOBS = [
+    ('40 7,19 * * *', 'ss_update.cron.sendmail', '>> /home/auto_ss/sendmail.log 2>&1'),
+]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = False

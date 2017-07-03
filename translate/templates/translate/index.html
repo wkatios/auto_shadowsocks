@@ -1,0 +1,141 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="renderer" content="webkit">
+    <title>Katios - 翻译</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Katios翻译，支持中、英、日、韩等多门语言。具有精准语言识别，高效、免费等特点。非常适用于境外旅游、对外交流、口语练习等情境，让你体验同声传译般的流畅和快感。">
+    <meta name="keywords" content="翻译,在线翻译,腾讯翻译君,翻译在线,英文翻译,英语翻译,日语翻译,韩语翻译,fanyi">
+    <!-- inject:css -->
+    <!-- endinject -->
+
+    <link rel="stylesheet" href="{% static "css/normalize.css" %}">
+    <link rel="stylesheet" href="{% static "css/jQuery.tips.css" %}">
+    <link rel="stylesheet" href="{% static "css/tooltip.min.css" %}">
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+
+    <link rel="icon" href="{% static "image/favicon.png" %}" type="image/x-icon" />
+    <link rel="shortcut icon" href="{% static "image/favicon.png" %}"  type="image/x-icon" />
+
+</head>
+
+<body>
+    <div class="navbar">
+        <div class="container">
+            <img href="/" src="{% static "image/katioslogo.png" %}" height="90" width="200"></a>
+            <ul>
+                <li><a href="/"  class="active">在线翻译</a></li>
+                <li><a href="/intro" > </a></li>
+
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="buttons">
+
+            <div class="button-group">
+                <div class="language-button" id="source_language_button">自动识别<i class="down_arrow"></i></div>
+                <ul class="dropdown-button hidden" id="source_language">
+                    <li>自动识别</li>
+                    <li>中文</li>
+                    <li>英文</li>
+                    <!--<li>日文</li>-->
+                    <li>韩文</li>
+                </ul>
+            </div>
+
+            <div class="exchange-button" id="exchange_button"></div>
+
+            <div class="button-group">
+                <div class="language-button" id="target_language_button">英文<i class="down_arrow"></i></div>
+                <ul class="dropdown-button hidden" id="target_language">
+                    <li>中文</li>
+                    <li>英文</li>
+                    <!--<li>日文</li>-->
+                    <li>韩文</li>
+                </ul>
+            </div>
+
+            <div class="translate-button" id="translate_button">翻 译</div>
+            <div class="clear"></div>
+
+        </div>
+        <div class="input-box" id="input-box">
+            <div class="input-wrap">
+                <div class="textarea-warp">
+                    <textarea placeholder="请输入要翻译的文字" id="text-input"></textarea>
+                </div>
+                <div class="tools-bar left-bar">
+                    <div class="play_text" id="play_input_text"></div>
+                </div>
+                <div class="tools-bar right-bar">
+
+                    <!--<div class="icon-forward-active"></div>
+                    <div class="icon-back-active"></div>-->
+                </div>
+                <div class="clean-button" id="clean_button"></div>
+                <div class="input-text-bg" id="input-text-bg"></div>
+                <div class="input-text-bg" id="input-text-bg2"></div>
+            </div>
+            <div class="output-wrap">
+                <div class="text-output-limit" id="text-output-limit"></div>
+                <div class="text-output" id="text-output"></div>
+                <div class="tools-bar left-bar">
+                    <div class="play_text" id="play_output_text"></div>
+                    <div class="copy-button" id="copy_button" data-clipboard-text=""></div>
+                </div>
+                <div class="tools-bar right-bar pair-display">
+                    双语对照
+                    <label class="switch">
+                        <input type="checkbox" id="pair_display">
+                        <div class="slider round"></div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="download-mask hidden">
+</div>
+
+
+<script src="{% static "js/jquery-1.12.4.js" %}"></script>
+<script src="{% static "js/jq.imgchange.js" %}"></script>
+<script src="{% static "js/jquery.cookie.js" %}"></script>
+<script src="{% static "js/clipboard.min.js" %}"></script>
+<script src="{% static "js/jQuery.tips.js" %}"></script>
+<script src="{% static "js/tooltip.min.js" %}"></script>
+<script src="{% static "js/index.js" %}"></script>
+
+
+<script language="javascript">
+    if (typeof(pgvMain) == 'function')
+        pgvMain({
+            repeatApplay: "true",
+            virtualDomain: "fanyi.qq.com"
+        });
+    
+</script>
+</body>
+
+</html>
+
+
+
+        <script>
+
+            var clipboard = new Clipboard('#copy_button');
+            clipboard.on('success', function(e) {
+                showTips('文本已复制到剪贴板');
+            });
+            clipboard.on('error', function(e) {
+                showTips('浏览器不支持文本复制到剪贴板');
+            })
+        </script>
+

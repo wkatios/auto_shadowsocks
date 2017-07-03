@@ -85,9 +85,31 @@ def send_yagmail(request):
 
 def getqrcode(request):
     pictures = ['usa', 'usb', 'usc', 'jpa', 'jpb', 'jpc', 'sga', 'sgb', 'sgc']
-    result = requests.get('http://katios.xyz:8000/geturl')
-    url = json.loads(result.content)['url']
-    return render(request, 'qrcode.html', {'url': url, 'pictures': pictures})
+    # result = requests.get('https://katios.xyz:80/geturl')
+    url = get_ss_url()
+    return render(request, 'ss_update/index.html')
+    # return render(request, 'ss_update/qrcode.html', {'url': url, 'pictures': pictures})
 
-
+import hashlib
+def wx(request):
+    if request.method == 'GET':
+        signature = request.GET.get('signature', None)
+        print signature
+        timestamp = request.GET.get('timestamp', None)
+        print timestamp
+        nonce = request.GET.get('nonce', None)
+        echostr = request.GET.get('echostr', None)
+        token = 'katios'
+        tmp_list = [token, timestamp, nonce]
+        tmp_list.sort()
+        sha1 = hashlib.sha1()
+        map(sha1.update, tmp_list)
+        hashcode = sha1.hexdigest()
+        if hashcode == signature:
+            return HttpResponse(echostr)
+import os
+def testSchedule():
+    path = os.path.abspath('.')
+    shell = 'echo aaa >> ~/crontab'.format(path)
+    os.system(shell)
 
