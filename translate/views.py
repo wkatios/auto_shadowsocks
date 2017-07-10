@@ -14,11 +14,13 @@ def translate(request):
     try:
         if request.method == 'POST':
             payload = {}
-            payload['sl'] = request.POST['sl']
-            payload['tl'] = request.POST['tl']
-            payload['st'] = request.POST['st']
+            print request.body
+            payload['source'] = request.POST['source']
+            payload['target'] = request.POST['target']
+            payload['sourceText'] = request.POST['sourceText']
             url = 'http://fanyi.qq.com/api/translate'
             html=requests.post(url, payload)
+            print html.content
             response_data = html.content
         return HttpResponse(response_data, content_type="application/json")
     except Exception, e:

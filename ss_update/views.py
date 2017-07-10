@@ -20,7 +20,7 @@ from django.utils.encoding import smart_unicode
 from django.utils.encoding import smart_str
 # Create your views here.
 def index(request):
-    return HttpResponse("欢迎光临 自强学堂!")
+    return HttpResponse("who are you!")
 
 def geturl(request):
     '''
@@ -87,8 +87,8 @@ def getqrcode(request):
     pictures = ['usa', 'usb', 'usc', 'jpa', 'jpb', 'jpc', 'sga', 'sgb', 'sgc']
     # result = requests.get('https://katios.xyz:80/geturl')
     url = get_ss_url()
-    return render(request, 'ss_update/index.html')
-    # return render(request, 'ss_update/qrcode.html', {'url': url, 'pictures': pictures})
+    # return render(request, 'ss_update/index.html')
+    return render(request, 'ss_update/qrcode.html', {'url': url, 'pictures': pictures})
 
 import hashlib
 def wx(request):

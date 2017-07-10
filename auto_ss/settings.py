@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'ss_update',
     'translate',
     'django_crontab',
-
+    'wechat',
 ]
 
 MIDDLEWARE = [

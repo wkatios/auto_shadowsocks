@@ -5,6 +5,7 @@ var isWorking = false;
 var inputTimer = null;
 var autoRecognise = true;
 var languageList = ['中文', '英文', '日文', '韩文'];
+var languageIDs = ['zh','en','jp', 'kr'];
 
 var currentSourceLanguage = -1;
 var currentRealSourceLanguage = 0;
@@ -154,27 +155,50 @@ function showTips(text) {
     });
 }
 
+function exchangeLanguageID(id) {
+
+    if(id < 4 && id >= 0)
+    {
+        return languageIDs[id];
+    }
+
+    return 'auto';
+}
+
+function exchangeLanguageString(id) {
+    for(var i=0; i<languageIDs.length; i++)
+    {
+        if(id == languageIDs[i])
+        {
+            return i;
+        }
+    }
+
+    return -1;
+}
+
 function translateText(source_text, from_language_id, target_language_id) {
     isWorking = true;
     $.ajax({
         url: "/test/",
         type: "post",
+        dataType: "json",
         data: {
-            sl: from_language_id,
-            tl: target_language_id,
-            st: source_text,
+            source: exchangeLanguageID(from_language_id),
+            target: exchangeLanguageID(target_language_id),
+            sourceText: source_text,
         },
         success: function(response) {
             isWorking = false;
 
-            var value = $('#text-input').val()
+            var value = $('#text-input').val();
             if (!value || value.length == 0) {
                 return;
             }
             var html = '';
             var sourceHtml = '';
             var description_text = '';
-            var isFirst = true;
+            
             var sentenceId = 0;
 
             if(response.options && response.options.limit && response.options.limit > 0)
@@ -190,34 +214,37 @@ function translateText(source_text, from_language_id, target_language_id) {
               $('#text-output').css('top', '15px');
             }
 
-            currentRealSourceLanguage = response.sourceLang;
+            currentRealSourceLanguage = exchangeLanguageString(response.source);
             if (autoRecognise) {
-                updateSourceLanguageButton(response.sourceLang, true);
-                updateTargetLanguageButton(response.targetLang, true);
+                updateSourceLanguageButton(exchangeLanguageString(response.source), true);
+                updateTargetLanguageButton(exchangeLanguageString(response.target), true);
                 updateTargetLanguageSelectList(currentSourceLanguage, currentTargetLanguage);
             }
 
-            for (var i = 0, ilength = response.result.length; i < ilength; i++) {
-                var line = response.result[i];
-                // html += '<p>';
-                isFirst = true;
-                for (var j = 0, jlength = line.data.length; j < jlength; j++) {
-                    var sentence = line.data[j];
-                    html += '<span class="text-src">';
-                    if (!isFirst && sentence.dst.length > 1) {
-                        html += '<br />';
-                    }
-                    html += sentence.src + '<br/></span><span class="text-dst sentence-' + sentenceId + '">' + sentence.dst + '</span>';
-                    sourceHtml += '<span class="sentence-' + sentenceId + '">' + sentence.src.replace(/ /g, '&nbsp;') + '</span>';
+            var isFirst = true;
+            for(var i=0, ilength= response.records.length; i < ilength; i++)
+            {
+                var sentence = response.records[i];
 
-                    sentenceId++;
-                    description_text += sentence.dst
-                    description_text += "\r\n";
-                    isFirst = false;
+                if(sentence.sourceText == '\n')
+                {
+                    html += '<br/>';
+                    sourceHtml += '<br/>';
                 }
+                else
+                {
+                    html += '<span class="text-src">';
+                if (!isFirst) {
+                    html += '<br />';
+                }
+                html += sentence.sourceText + '<br/></span><span class="text-dst sentence-' + sentenceId + '">' + sentence.targetText + '</span>';
+                sourceHtml += '<span class="sentence-' + sentenceId + '">' + sentence.sourceText.replace(/ /g, '&nbsp;') + '</span>';
 
-                html += '<br/>';
-                sourceHtml += '<br/>';
+                sentenceId++;
+                description_text += sentence.targetText;
+                description_text += "\r\n";
+                isFirst = false;
+                }
             }
 
             $('#text-output').html(html);
